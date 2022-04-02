@@ -1,0 +1,28 @@
+{
+  "name": "mwa-project",
+  "version": "1.0.0",
+  "description": "Daily water consumption tracking app",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "server": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/subo8/MWA-Project.git"
+  },
+  "author": "Byambadorj Batsukh",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/subo8/MWA-Project/issues"
+  },
+  "homepage": "https://github.com/subo8/MWA-Project#readme",
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "mongoose": "^6.2.9"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
