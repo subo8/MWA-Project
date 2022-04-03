@@ -21,7 +21,6 @@ mongoose.connection.on("error", function (err) {
     console.log("Mongoose error", err);
 });
 
-//Disconnect
 process.on("SIGINT", function () {
     mongoose.connection.close(function () {
         console.log(process.env.SIGINT_MESSAGE);
@@ -29,20 +28,11 @@ process.on("SIGINT", function () {
     });
 });
 
-//Terminate
 process.on("SIGTERM", function () {
     mongoose.connection.close(function () {
         console.log(process.env.SIGTERM_MESSAGE);
         process.exit(0);
     });
 });
-
-//Restart
-// process.on("SIGUSR2", function () {
-//     mongoose.connection.close(function () {
-//         console.log(process.env.SIGUSR2_MESSAGE);
-//         process.kill(process.pid, "SIGUSR2");
-//     });
-// });
 
 
