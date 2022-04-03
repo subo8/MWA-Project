@@ -101,7 +101,7 @@ const update = function (req, res) {
             response.status = process.env.RESP400;
             response.message = "User not found! Better check user ID!";
         } else {
-            response.message = user;
+            response.message = `User _id: ${user._id} updated`;
         }
         res.status(response.status).json(response.message);
     });
