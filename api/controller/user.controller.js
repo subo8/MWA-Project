@@ -55,11 +55,11 @@ const getAll = function (req, res) {
 
     if (isNaN(count) || isNaN(offset)) {
         response.status = process.env.RESP400;
-        response.message = "Count is other than the number!";
+        response.message = { "message": "Count is other than the number!" };
         res.status(response.status).json(response.message);
     } else if (maxLimit < count || maxOffset < offset) {
         response.status = process.env.RESP400;
-        response.message = "Exceeded limit or offset";
+        response.message = { "message": "Exceeded limit or offset" };
         res.status(response.status).json(response.message);
     } else {
         Users.find().skip(offset).limit(count).exec(function (err, users) {
@@ -67,7 +67,6 @@ const getAll = function (req, res) {
                 response.status = process.env.RESP500;
                 response.message = err;
             } else {
-                console.log('Get allusers called', users.length);
                 response.message = users;
             }
             res.status(response.status).json(response.message);
@@ -83,7 +82,7 @@ const getOne = function (req, res) {
             response.message = err;
         } else if (!user) {
             response.status = process.env.RESP400;
-            response.message = "User not found! Better check user ID!";
+            response.message = { "message": "User not found! Better check user ID!" };
         } else {
             response.message = user;
         }
@@ -91,20 +90,82 @@ const getOne = function (req, res) {
     });
 }
 
-const update = function (req, res) {
+
+const _updateOne = function (req, res, updateUserCallback) {
     const userID = req.params.userID;
-    Users.findByIdAndUpdate(userID, req.body, function (err, user) {
+    Users.findById(userID).exec(function (err, user) {
         if (err) {
             response.status = process.env.RESP500;
             response.message = err;
         } else if (!user) {
             response.status = process.env.RESP400;
-            response.message = "User not found! Better check user ID!";
-        } else {
-            response.message = `User _id: ${user._id} updated`;
+            response.message = { "message": "User ID not found!" }
         }
-        res.status(response.status).json(response.message);
+        if (response.status !== process.env.RESP200) {
+            res.status(response.status).json(response.message);
+        } else {
+            updateUserCallback(req, res, user, response);
+        }
     });
+}
+
+const fullUpdate = function (req, res) {
+    const { name, gender, age, weigth } = req.body;
+    const userUpdate = function (req, res, user, response) {
+        if (!name || !gender || !age || !weigth) {
+            response.status = process.env.RESP400;
+            response.message = { "message": "Please Include all field" };
+            res.status(response.status).json(response.message);
+        } else if (isNaN(age) || isNaN(weigth)) {
+            response.status = process.env.RESP400;
+            response.message = { "message": "Age and weight must be digits" };
+            res.status(response.status).json(response.message);
+        } else {
+            user.name = name;
+            user.gender = gender;
+            user.age = age;
+            user.weigth = weigth;
+            user.consumption = user.consumption;
+            user.save(function (err, updatedUser) {
+                if (err) {
+                    response.status = process.env.RESP500;
+                    response.message = err;
+                } else if (!updatedUser) {
+                    response.status = process.env.RESP400;
+                    response.message = { "message": "User not found! Better check user ID!" };
+                } else {
+                    response.message = { "message": `User _id: ${user._id} updated` };
+                }
+                res.status(response.status).json(response.message);
+            });
+        }
+    }
+    _updateOne(req, res, userUpdate);
+}
+
+const partialUpdate = function (req, res) {
+    const { name, gender, age, weigth } = req.body;
+    const userUpdate = function (req, res, user, response) {
+        user.name = name || user.name;
+        user.gender = gender || user.gender;
+        user.age = age || user.age;
+        user.weigth = weigth || user.weigth;
+        user.consumption = user.consumption;
+        user.save(function (err, updatedUser) {
+            if (err) {
+                response.status = process.env.RESP500;
+                response.message = err;
+            } else if (!updatedUser) {
+                response.status = process.env.RESP400;
+                response.message = { "message": "User not found! Better check user ID!" };
+            } else {
+                response.message = { "message": `User _id: ${user._id} updated` };
+            }
+            res.status(response.status).json(response.message);
+        });
+
+    }
+    _updateOne(req, res, userUpdate);
 }
 
 const deleteOne = function (req, res) {
@@ -115,9 +176,9 @@ const deleteOne = function (req, res) {
             response.message = err;
         } else if (!user) {
             response.status = process.env.RESP400;
-            response.message = "User not found! Better check user ID!";
+            response.message = { "message": "User not found! Better check user ID!" };
         } else {
-            response.message = `User _id: ${user._id} deleted successfully`;
+            response.message = { "message": `User _id: ${user._id} deleted successfully` };
         }
         res.status(response.status).json(response.message);
     });
@@ -127,6 +188,7 @@ module.exports = {
     create,
     getAll,
     getOne,
-    update,
+    fullUpdate,
+    partialUpdate,
     deleteOne,
 }

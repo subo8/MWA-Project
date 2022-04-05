@@ -6,7 +6,7 @@
 "use strict";
 const express = require('express');
 const router = express.Router();
-const { create, getAll, getOne, update, deleteOne } = require('../controller/consumption.controller');
+const { create, getAll, getOne, fullUpdate, partialUpdate, deleteOne } = require('../controller/consumption.controller');
 
 router
     .route('/:userID/consumption')
@@ -16,7 +16,8 @@ router
 router
     .route('/:userID/consumption/:consumptionID')
     .get(getOne)
-    .put(update)
+    .put(fullUpdate)
+    .patch(partialUpdate)
     .delete(deleteOne);
 
 

@@ -89,12 +89,12 @@ const getOne = function (req, res) {
             response.message = err;
         } else if (!user) {
             response.status = process.env.RESP400;
-            response.message = "User not found";
+            response.message = { "message": "User not found" };
         } else {
             const consumption = user.consumption.id(req.params.consumptionID);
             if (!consumption) {
                 response.status = process.env.RESP400;
-                response.message = "Consumption not found";
+                response.message = { "message": "Consumption not found" };
             } else {
                 response.status = process.env.RESP200;
                 response.message = consumption;
@@ -104,37 +104,91 @@ const getOne = function (req, res) {
     });
 }
 
-const update = function (req, res) {
+const _updateOne = function (req, res, updateConsumptionCallback) {
     const userID = req.params.userID;
-    const size = req.body.size;
+    Users.findById(userID).select("consumption").exec(function (err, user) {
+        if (err) {
+            response.status = process.env.RESP500;
+            response.message = err;
+        } else if (!user) {
+            console.log("User ID not found!");
+            response.status = process.env.RESP400;
+            response.message = { "message": "User ID not found!" }
+        }
+        if (response.status !== process.env.RESP200) {
+            res.status(response.status).json(response.message);
+        }
+        updateConsumptionCallback(req, res, user, response);
+    });
+}
 
+const _fullConsumptionUpdate = function (req, res, user) {
+    const size = req.body.size;
     if (!size) {
         response.status = process.env.RESP400;
-        response.message = { message: "Please insert update ssize!" };
+        response.message = { "message": "Please insert update ssize!" };
         res.status(response.status).json(response.message);
     } else if (parseInt(size) >= process.env.MAX_CONSUMPTION) {
         response.status = process.env.RESP500;
-        response.message = { message: `Max size exceeded than ${process.env.MAX_SIZE}` };
+        response.message = { "message": `Max size exceeded than ${process.env.MAX_SIZE}` };
         res.status(response.status).json(response.message);
     } else {
-        Users.findById(userID).select("consumption").exec(function (err, user) {
+        const consumption = user.consumption.id(req.params.consumptionID);
+        if (!consumption) {
+            response.status = process.env.RESP400;
+            response.message = { "message": "Consumption id not found!" };
+            res.status(response.status).json(response.message);
+        } else {
+            consumption.size = size;
+            user.save(function (err, updatedConsumption) {
+                if (err) {
+                    response.status = process.env.RESP500;
+                    response.message = err;
+                } else if (!updatedConsumption) {
+                    response.statuss = process.env.RESP400;
+                    response.message = { "message": "Consumption not found" };
+                } else {
+                    response.message = { "message": `Consumption _id: ${updatedConsumption._id} updated` }
+                }
+                res.status(response.status).json(response.message);
+            });
+        }
+    }
+}
+
+const _partialConsumptionUpdate = function (req, res, user) {
+    const size = req.body.size;
+    const consumption = user.consumption.id(req.params.consumptionID);
+
+    if (!consumption) {
+        response.status = process.env.RESP400;
+        response.message = { "message": "Consumption id not found!" };
+        res.status(response.status).json(response.message);
+    } else {
+        consumption.size = size || consumption.size;
+        user.save(function (err, updatedConsumption) {
             if (err) {
                 response.status = process.env.RESP500;
                 response.message = err;
-                res.status(response.status).json(response.message);
-            } else if (!user) {
+            } else if (!updatedConsumption) {
                 response.status = process.env.RESP400;
-                response.message = "User not found";
-                res.status(response.status).json(response.message);
+                response.message = { "message": "Consumption not found" };
             } else {
-                const consumption = user.consumption.id(req.params.consumptionID);
-                consumption.set(req.body);
-                user.save(function () {
-                    res.status(process.env.RESP200).json(`Updated successfully userID: ${user._id} consumption!`);
-                });
+                response.message = { "message": `Consumption _id: ${updatedConsumption._id} updated` }
             }
+            res.status(response.status).json(response.message);
         });
     }
+}
+
+const fullUpdate = function (req, res) {
+    console.log("Full update one", req.body);
+    _updateOne(req, res, _fullConsumptionUpdate);
+}
+
+const partialUpdate = function (req, res) {
+    console.log("Partial update one");
+    _updateOne(req, res, _partialConsumptionUpdate);
 }
 
 const deleteOne = function (req, res) {
@@ -168,6 +222,7 @@ module.exports = {
     create,
     getAll,
     getOne,
-    update,
+    fullUpdate,
+    partialUpdate,
     deleteOne,
 }
