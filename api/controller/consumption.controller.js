@@ -56,7 +56,7 @@ const create = function (req, res) {
         response.status = process.env.RESP400;
         response.message = { message: "Please insert size!" };
         res.status(response.status).json(response.message);
-    } else if (parseInt(size) >= process.env.MAX_SIZE) {
+    } else if (parseInt(size) >= process.env.MAX_CONSUMPTION) {
         response.status = process.env.RESP500;
         response.message = { message: `Max size exceeded than ${process.env.MAX_SIZE}` };
         res.status(response.status).json(response.message);

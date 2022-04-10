@@ -1,0 +1,41 @@
+<div class="container top">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+        <li class="breadcrumb-item"><a routerLink="/users">User List</a></li>
+        <li class="breadcrumb-item"><a routerLink="/user/{{user._id}}">User Profile</a></li>
+        <li class="breadcrumb-item active">User Edit</li>
+    </ol>
+    <div class="d-grid gap-2">
+        <form>
+            <fieldset>
+                <h2>Update user information:</h2>
+                <div class="form-group">
+                    <label for="fullName" class="form-label mt-4">Full Name:</label>
+                    <input type="text" class="form-control" id="fullName" placeholder="Full Name"
+                        [(ngModel)]="this.user.name" name="name">
+                </div>
+                <div class=" form-group">
+                    <label for="genderSelect" class="form-label mt-4">Select Gender:</label>
+                    <select class="form-select" id="genderSelect" [(ngModel)]="this.user.gender" name="gender">
+                        <option>Select</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="age" class="form-label mt-4">Age:</label>
+                    <input type="number" class="form-control" id="age" placeholder="Age" [(ngModel)]="this.user.age"
+                        name="age">
+                </div>
+                <div class="form-group">
+                    <label for="weigth" class="form-label mt-4">Weigth:</label>
+                    <input type="number" class="form-control" id="weigth" placeholder="Weigth"
+                        [(ngModel)]="this.user.weigth" name="weigth">
+                </div>
+            </fieldset>
+            <fieldset class="top">
+                <button (click)="edit()" type="button" class="btn btn-success">Save</button>
+            </fieldset>
+        </form>
+    </div>
+</div>

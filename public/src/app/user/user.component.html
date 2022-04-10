@@ -1,0 +1,78 @@
+<div class="container top">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+        <li class="breadcrumb-item"><a routerLink="/users">User List</a></li>
+        <li class="breadcrumb-item active">User Profile</li>
+    </ol>
+    <div *ngIf="user !=null">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card mb-3">
+                    <h3 class="card-header">
+                        {{user.name}}
+                    </h3>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Age: {{user.age}}</li>
+                        <li class="list-group-item">Gender: {{user.gender}}</li>
+                        <li class="list-group-item">Weigth: {{user.weigth}} Kg</li>
+                    </ul>
+                    <div class="card-body">
+                        <h5 class="card-title">Must have daily consumption</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Based on your Age and Weigth you should intake {{ this.mustIntake | number:
+                            '1.1-1'}}
+                            L water
+                            daily
+                            basis. </p>
+
+                        <div class="alert alert-dismissible alert-success">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            <p>It’s important to remember that this calculation will not produce an exact measure of
+                                your
+                                water needs, and that it reflects your approximate baseline water requirement from all
+                                sources, including food. <a
+                                    href="https://www.weightwatchers.com/ca/en/article/how-much-water-should-you-drink-every-day">Source:</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <button type="button" class="btn btn-warning" routerLink="/user-edit/{{user._id}}">Edit</button>
+                        <button type="button" class="btn btn-danger" (click)="delete(user._id)">Delete
+                            User!</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card mb-3">
+                    <h3 class="card-header">
+                        Consumption:
+                        <button type="button" class="btn btn-success" routerLink="/user-intake/{{user._id}}">Add
+                            Intake</button>
+                    </h3>
+                    <div *ngIf="user.consumption !=null">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Water-Intake (milliliter):</th>
+                                    <th scope="col">Created At:</th>
+                                    <th scope="col">Delete:</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="table-success" *ngFor="let intake of user.consumption">
+                                    <td>{{intake.size}} mL</td>
+                                    <td>{{intake.createdAt | date: "MM-dd-yyyy (hh:mm)" }}</td>
+                                    <td>
+                                        <button class="btn btn-outline-danger"
+                                            (click)="deleteIntake(intake._id)">Delete</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

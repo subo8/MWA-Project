@@ -47,11 +47,20 @@ const create = function (req, res) {
 const getAll = function (req, res) {
     let offset = parseInt(process.env.OFFSET);
     let count = parseInt(process.env.LIMIT);
+    let search = null;
     const maxLimit = parseInt(process.env.MAX_LIMIT, 10);
     const maxOffset = parseInt(process.env.MAX_OFFSET, 10);
 
     if (req.query && req.query.count) count = parseInt(req.query.count);
     if (req.query && req.query.offset) offset = parseInt(req.query.offset);
+
+    if (req.query && req.query.search) {
+        search = {
+            name: {
+                $regex: req.query.search
+            }
+        }
+    }
 
     if (isNaN(count) || isNaN(offset)) {
         response.status = process.env.RESP400;
@@ -62,7 +71,7 @@ const getAll = function (req, res) {
         response.message = { "message": "Exceeded limit or offset" };
         res.status(response.status).json(response.message);
     } else {
-        Users.find().skip(offset).limit(count).exec(function (err, users) {
+        Users.find(search).skip(offset).limit(count).exec(function (err, users) {
             if (err) {
                 response.status = process.env.RESP500;
                 response.message = err;

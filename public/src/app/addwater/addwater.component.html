@@ -1,0 +1,27 @@
+<div class="container top">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+        <li class="breadcrumb-item"><a routerLink="/users">User List</a></li>
+        <li class="breadcrumb-item"><a routerLink="/user/{{this.userID}}">User Profile</a></li>
+        <li class="breadcrumb-item active">Add Intake</li>
+    </ol>
+    <form>
+        <fieldset>
+            <legend>What you consume so far?</legend>
+            <div class="form-group">
+                <label for="sizeSelect" class="form-label mt-4">Select size (mL):</label>
+                <select class="form-select" id="sizeSelect" [(ngModel)]="this.water.size" name="size">
+                    <option value="100">100</option>
+                    <option value="200">200</option>
+                    <option value="300">300</option>
+                    <option value="400">400</option>
+                    <option value="500">500</option>
+                    <option value="600">600</option>
+                    <option value="700">700</option>
+                    <option value="800">800</option>
+                </select>
+            </div>
+            <button (click)="add()" type="button" class="btn btn-info top">Add Intake</button>
+        </fieldset>
+    </form>
+</div>
