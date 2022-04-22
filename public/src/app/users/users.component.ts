@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { UserDataService } from '../user-data.service';
+import { AuthenticationService } from '../authentication.service';
 
 export class Water {
   _id!: string;
@@ -14,18 +15,6 @@ export class Water {
 }
 
 export class Users {
-  // #_id!: string;
-  // #name!: string;
-  // #gender!: string;
-  // #age!: number;
-  // #weigth!: number;
-  // #consumption!: any;
-  // get _id() { return this.#_id }
-  // get name() { return this.#name }
-  // get gender() { return this.#gender }
-  // get age() { return this.#age }
-  // get weigth() { return this.#weigth }
-  // get consumption() { return this.#consumption }
   _id!: string;
   name!: string;
   gender!: string;
@@ -53,7 +42,11 @@ export class UsersComponent implements OnInit {
   search: string = '';
   isSearched: boolean = false;
 
-  constructor(private userService: UserDataService) { }
+  get isLoggedIn() { return this._authService.isLoggedIn }
+
+  constructor(
+    private userService: UserDataService,
+    private _authService: AuthenticationService) { }
 
   public updateList() {
     this.userService.getUsers(this.search).subscribe({

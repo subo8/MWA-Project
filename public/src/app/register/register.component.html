@@ -1,0 +1,33 @@
+<app-navbar></app-navbar>
+<div class="container top">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+        <li class="breadcrumb-item"><a routerLink="register">Register Admin</a></li>
+    </ol>
+    <div class="d-grid gap-2">
+        <form [formGroup]="registrationForm" (ngSubmit)="onSubmit(registrationForm)">
+            <div class="form-group">
+                <label class="form-label mt-4">Registration Information:</label>
+                <div class="form-floating mb-3">
+                    <input formControlName="name" type="text" class="form-control" id="name"
+                        placeholder="Name would be here">
+                    <label for="name">Name</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input formControlName="username" type="text" class="form-control" id="username"
+                        placeholder="Name would be here">
+                    <label for="username">Username</label>
+                </div>
+                <div class="form-floating">
+                    <input formControlName="password" type="password" class="form-control" id="password"
+                        placeholder="Password">
+                    <label for="password">Password</label>
+                    <small id="password" class="form-text text-muted">You're password would be safe!</small>
+                </div>
+            </div>
+            <div class="top">
+                <button type="submit" class="btn btn-outline-success">Register</button>
+            </div>
+        </form>
+    </div>
+</div>

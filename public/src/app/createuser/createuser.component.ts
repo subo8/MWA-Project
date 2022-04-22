@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { UserDataService } from '../user-data.service';
+import { AuthenticationService } from '../authentication.service';
 
 @Component({
   selector: 'app-createuser',
@@ -13,10 +14,13 @@ export class CreateuserComponent implements OnInit {
 
   addUserForm!: FormGroup;
 
+  get isLoggedIn() { return this._auth.isLoggedIn };
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private userService: UserDataService) {
+    private userService: UserDataService,
+    private _auth: AuthenticationService) {
     this.addUserForm = this.formBuilder.group({
       name: "",
       gender: "",

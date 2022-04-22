@@ -1,37 +1,46 @@
+<app-navbar></app-navbar>
 <div class="container top">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
-        <li class="breadcrumb-item active">Create user</li>
-    </ol>
-    <div class="d-grid gap-2">
-        <form [formGroup]="addUserForm" (ngSubmit)="add(addUserForm)">
-            <fieldset>
-                <h2><u>Required user information:</u></h2>
-                <div class="form-group">
-                    <label for="fullName" class="form-label mt-4">Full Name:</label>
-                    <input formControlName="name" type="text" class="form-control" id="fullName"
-                        placeholder="Full Name">
-                </div>
-                <div class="form-group">
-                    <label for="genderSelect" class="form-label mt-4">Select Gender:</label>
-                    <select formControlName="gender" class="form-select" id="genderSelect">
-                        <option>Select</option>
-                        <option>Male</option>
-                        <option>Female</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="age" class="form-label mt-4">Age:</label>
-                    <input formControlName="age" type="number" class="form-control" id="age" placeholder="Age">
-                </div>
-                <div class="form-group">
-                    <label for="weigth" class="form-label mt-4">Weigth (Based on Kilogram):</label>
-                    <input formControlName="weigth" type="number" class="form-control" id="weigth" placeholder="Weigth">
-                </div>
-            </fieldset>
-            <fieldset class="top">
-                <button type="submit" class="btn btn-success">Create</button>
-            </fieldset>
-        </form>
+    <div *ngIf="isLoggedIn">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+            <li class="breadcrumb-item active">Create user</li>
+        </ol>
+        <div class="d-grid gap-2">
+            <form [formGroup]="addUserForm" (ngSubmit)="add(addUserForm)">
+                <fieldset>
+                    <h2><u>Required user information:</u></h2>
+                    <div class="form-group">
+                        <label for="fullName" class="form-label mt-4">Full Name:</label>
+                        <input formControlName="name" type="text" class="form-control" id="fullName"
+                            placeholder="Full Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="genderSelect" class="form-label mt-4">Select Gender:</label>
+                        <select formControlName="gender" class="form-select" id="genderSelect">
+                            <option>Select</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="age" class="form-label mt-4">Age:</label>
+                        <input formControlName="age" type="number" class="form-control" id="age" placeholder="Age">
+                    </div>
+                    <div class="form-group">
+                        <label for="weigth" class="form-label mt-4">Weigth (Based on Kilogram):</label>
+                        <input formControlName="weigth" type="number" class="form-control" id="weigth"
+                            placeholder="Weigth">
+                    </div>
+                </fieldset>
+                <fieldset class="top">
+                    <button type="submit" class="btn btn-success">Create</button>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <div *ngIf="!isLoggedIn">
+        <div class="alert alert-dismissible alert-danger">
+            <strong>Oh snap!</strong> You have to login first!
+        </div>
     </div>
 </div>

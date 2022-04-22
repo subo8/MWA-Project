@@ -6,6 +6,7 @@
 
 const mongoose = require('mongoose');
 require('./users-model');
+require('./credential-model');
 
 mongoose.connect(process.env.DB_URL);
 

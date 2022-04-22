@@ -1,0 +1,15 @@
+<div *ngIf="!isLoggedIn">
+    <form (ngForm)="loginForm" (ngSubmit)="onSubmit()">
+        <input [(ngModel)]=this.credentials.username name="username" type="text" placeholder="Username">
+        <input [(ngModel)]=this.credentials.password name="password" type="password" placeholder="Password">
+        <button class="btn btn-success my-2 my-sm-0" type="submit">Login</button>
+    </form>
+</div>
+
+<p *ngIf="!isSuccess" style="color: white;">{{alertMessage}}</p>
+
+<div *ngIf="isLoggedIn">
+    <h6 style="color:white">Welcome {{name}}
+        <a style="margin-left:10px; margin-right:20px" class="btn btn-danger" (click)="logOut()">LogOut</a>
+    </h6>
+</div>

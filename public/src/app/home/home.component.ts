@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthenticationService } from '../authentication.service';
 
 @Component({
   selector: 'app-home',
@@ -8,7 +9,11 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private _router: Router) { }
+  get isLoggedIn() { return this._authService.isLoggedIn; }
+
+  constructor(
+    private _router: Router,
+    private _authService: AuthenticationService) { }
 
   addUser(): void {
     this._router.navigate(['user-create']);
@@ -16,6 +21,10 @@ export class HomeComponent implements OnInit {
 
   getUsers(): void {
     this._router.navigate(['users']);
+  }
+
+  registerAdmin(): void {
+    this._router.navigate(['register']);
   }
 
   ngOnInit(): void {

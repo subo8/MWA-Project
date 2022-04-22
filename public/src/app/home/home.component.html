@@ -1,8 +1,22 @@
+<app-navbar></app-navbar>
 <div class="container top">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
-    </ol>
-    <div class="d-grid gap-2">
+    <div *ngIf="!isLoggedIn" class="d-grid gap-2 top">
+        <div class="alert alert-dismissible alert-warning">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <h4 class="alert-heading">Warning!</h4>
+            <p class="mb-0">After you login with Admin user, you can do following things: <a (click)="registerAdmin()"
+                    class="alert-link">Create admin</a>.
+                <br />
+                1. Create user on this system (not admin user). <br />
+                2. You can see created user list with water-intake.<br />
+                3. Add water-intake to specific user.<br />
+                4. Edit user<br />
+                5. Delete user and water-intake. <br />
+            </p>
+        </div>
+
+    </div>
+    <div *ngIf="isLoggedIn" class="d-grid gap-2 top">
         <button (click)="addUser()" class="btn btn-lg btn btn-outline-success" type="button">Create user</button>
         <button (click)="getUsers()" class="btn btn-lg btn-outline-info" type="button">User List</button>
     </div>

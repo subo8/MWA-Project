@@ -1,44 +1,53 @@
+<app-navbar></app-navbar>
 <div class="container top">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
-        <li class="breadcrumb-item active">User List</li>
-    </ol>
-    <div class="row top">
-        <div class="col-8">
-            <h2><u>Registered user table:</u></h2>
-        </div>
-        <div class="col-4">
-            <div class="form-group">
-                <div class="input-group mb-3">
-                    <input [(ngModel)]="search" name="search" type="text" class="form-control" placeholder="Search....">
-                    <button (click)="searchUser()" class="btn btn-outline-primary" type="button">Lets Find!</button>
+    <div *ngIf="isLoggedIn">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+            <li class="breadcrumb-item active">User List</li>
+        </ol>
+        <div class="row top">
+            <div class="col-8">
+                <h2><u>Registered user table:</u></h2>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <input [(ngModel)]="search" name="search" type="text" class="form-control"
+                            placeholder="Search....">
+                        <button (click)="searchUser()" class="btn btn-outline-primary" type="button">Lets Find!</button>
+                    </div>
                 </div>
             </div>
         </div>
+        <div>
+            <h3 *ngIf="isSearched && users.length == 0"> Not found</h3>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Full Name:</th>
+                        <th scope="col">Gender:</th>
+                        <th scope="col">Age:</th>
+                        <th scope="col">Weigth (Kg):</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table-info" *ngFor="let user of users">
+                        <td>{{user.name}}</td>
+                        <td>{{user.gender}}</td>
+                        <td>{{user.age}}</td>
+                        <td>{{user.weigth}}</td>
+                        <td>
+                            <button routerLink="/user/{{user._id}}">More..</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-    <div>
-        <h3 *ngIf="isSearched && users.length == 0"> Not found</h3>
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">Full Name:</th>
-                    <th scope="col">Gender:</th>
-                    <th scope="col">Age:</th>
-                    <th scope="col">Weigth (Kg):</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="table-info" *ngFor="let user of users">
-                    <td>{{user.name}}</td>
-                    <td>{{user.gender}}</td>
-                    <td>{{user.age}}</td>
-                    <td>{{user.weigth}}</td>
-                    <td>
-                        <button routerLink="/user/{{user._id}}">More..</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <div *ngIf="!isLoggedIn">
+        <div class="alert alert-dismissible alert-danger">
+            <strong>Oh snap!</strong> You have to login first!
+        </div>
     </div>
 </div>
